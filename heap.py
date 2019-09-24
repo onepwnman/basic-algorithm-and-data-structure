@@ -14,7 +14,9 @@ class MinHeap(object):
       self.heap = [0] + random_list
       self.build_heap(1)
 
-
+  def __repr__(self, ):
+    return repr(self.heap[1:])
+    
   def insert(self, val):
     # Heap is always already heapified
     self.heap.append(val)
@@ -65,11 +67,6 @@ class MinHeap(object):
         return left_child
     
 
-
-  def print_heap(self, ):
-    print(self.heap[1:])
-
-
   def build_heap(self, root):
     # Postorder traversal 
     left_child,right_child = 2*root,2*root+1
@@ -112,30 +109,30 @@ if __name__== '__main__':
   print("Heap Insert Test\n\n\n\n")
   for _ in range(val[1]):
     h.insert(randint(0,100))
-    h.print_heap()
+    print(h)
 
   print("=============================")
   print("Heap Remove Test\n\n\n\n")
   for _ in range(val[1]):
     h.remove()
-    h.print_heap()
+    print(h)
 
   print("==============================")
   print("Build Heap Test\n\n\n\n")
-  print("Building Heap Test Between My Own Function and heapq Library!")
+  print("Building Heap Test Between My Function and heapq Library!")
   randlist = [randint(0,20) for _ in range(val[2])]
   print("Sample List : {}".format(randlist))
 
   
   h = MinHeap(randlist)
-  print("\n\n\n My Own Function Output : ", end='')
-  h.print_heap()
+  print("\n\n\n My Function Output : ", end='')
+  print(h)
 
 
   heapq.heapify(randlist)
   print("\n\n\n heapq Library Function Output : {}\n".format(randlist))
 
-  print('Is Output Same? : {}\n\n'.format(h.heap[1:] == randlist))
+  print('Is The Output Same? : {}\n\n'.format(str(h) == str(randlist)))
 
   print("=============================")
   print("Heap Sort Test\n\n\n\n")

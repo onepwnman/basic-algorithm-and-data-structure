@@ -28,26 +28,36 @@ class Graph(object):
       return 'ID({}) : Neighbors({})'.format(self.id, self.neighbors)
 
 
-  def __init__(self,):
+  def __init__(self, ):
     self.vertices = {}
 
-  def add_vertex(self, key):
-    self.vertices[key] = self.Vertex(key)
-    
+  def __len__(self, ):
+    return len(self.vertices)
+
   def __contains__(self, vertex):
     return vertex in self.vertices
 
-  # if vertex is not exist then create vertex first
-  def add_edge(self, start, end, weight=None):
-    if start not in self.vertices:
-      self.add_vertex(start)
-    if end not in self.vertices:
-      self.add_vertex(end)
-    self.vertices[start].add_neighbor(end, weight)
-    self.vertices[end].add_neighbor(start, weight)
-  
   def __iter__(self, ):
     return iter(self.vertices.values())
+
+  def add_vertex(self, key):
+    self.vertices[key] = self.Vertex(key)
+
+  # if vertex is not exist then create vertex first
+  def add_edge(self, _from, _to, weight=None):
+    if _from not in self.vertices:
+      self.add_vertex(_from)
+    if _to not in self.vertices:
+      self.add_vertex(_to)
+    self.vertices[_from].add_neighbor(_to, weight)
+    self.vertices[_to].add_neighbor(_from, weight)
+  
+  def edges(self, ):
+    edges = []    
+    for vertex in self.vertices.items():
+       
+      
+      
 
 if __name__ == '__main__':
   g = Graph()
