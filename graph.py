@@ -53,12 +53,10 @@ class Graph(object):
     self.vertices[_to].add_neighbor(_from, weight)
   
   def edges(self, ):
-    edges = []    
-    for vertex in self.vertices.items():
+    pass
        
       
       
-
 if __name__ == '__main__':
   g = Graph()
   g.add_edge('A','B')
