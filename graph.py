@@ -30,6 +30,7 @@ class Graph(object):
 
   def __init__(self, ):
     self.vertices = {}
+    self.edges = []
 
   def __len__(self, ):
     return len(self.vertices)
@@ -51,10 +52,11 @@ class Graph(object):
       self.add_vertex(_to)
     self.vertices[_from].add_neighbor(_to, weight)
     self.vertices[_to].add_neighbor(_from, weight)
+    if (_to, _from, weight) not in self.edges:
+      self.edges.append((_from, _to, weight))
   
-  def edges(self, ):
-    pass
-       
+  def get_edges(self, ):
+    return self.edges
       
       
 if __name__ == '__main__':

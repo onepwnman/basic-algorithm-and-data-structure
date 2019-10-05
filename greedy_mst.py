@@ -1,6 +1,7 @@
 #!/usr/bin/env  python3
 from graph import Graph
 from heapq import heappush, heappop
+from union_find import UnionFind
 
 # MST는 greedy 알고리즘이다.
 
@@ -15,65 +16,60 @@ from heapq import heappush, heappop
 # Disjoint-set which is called Union-Find
 # 서로 중복되지 않는 부분 집합들 로 나눠진 원소들에 대한 정보를 저장하고 조작하는 자료구조
 # tree로 구현하는게 가장 효율적
-class UnionFind(object):
-	def __init__(self, n):
-		self.parent = [x for x in range(n)]
-		self.rank = [0]*n
-			
-	def union(self, x, y):
-		x,y = self.find(x),self.find(y)
-		if x == y: return 
-		if self.rank[x] > self.rank[y]: self.parent[y] = x
-		else: self.parent[x] = y
-		if self.rank[x] == self.rank[y]: self.rank[y] += 1
-	
-	def find(self, x):
-		if self.parent[x] == x:	return x
-		self.parent[x] = find(self.parent[x])
-		return self.parent[x]
-
 
 class MST(object):
   
-	def __init__(self, graph):
-		self.graph = graph
+  def __init__(self, graph):
+    self.graph = graph
 
-	def prim(self, start):
-		total_cost,mst = 0,[] 
-		discovered,explored = [(0,start,start)],set()
-		while discovered:
-			cost,_from,_to = heappop(discovered)
-			if _to not in explored:
-				explored.add(_to)
-				total_cost += cost
-				mst.append((_from,_to))
-				for v in set(self.graph.vertices[_to].neighbors) - explored:
-					heappush(discovered, (self.graph.vertices[_to].neighbors[v],_to,v) )
+  def prim(self, start):
+    total_cost,mst = 0,[] 
+    discovered,explored = [(0,start,start)],set()
+    while discovered:
+      cost,_from,_to = heappop(discovered)
+      if _to not in explored:
+        explored.add(_to)
+        total_cost += cost
+        mst.append((_from,_to))
+        for v in set(self.graph.vertices[_to].neighbors) - explored:
+          heappush(discovered, (self.graph.vertices[_to].neighbors[v],_to,v) )
 
-		return total_cost, mst[1:] 
-		
-	def kruskal(self, ):
-		pass
+    return total_cost, mst[1:] 
+    
+  def kruskal(self, ):
+    # Sorted by weight
+    total_cost, u = 0, UnionFind()
+    edges = sorted(self.graph.get_edges(), key=lambda x: x[2])
+    for start, end, _ in edges:
+      u.union(u[start],u[end])
+    mst = u.get_parent()
+    print(mst)
+    for e in edges:
+      for m in mst.items():
+        if set(m).issubset(set(e)): total_cost += e[2]
+
+    return total_cost, mst
+        
 
 
 if __name__ == '__main__':
 
-	g = Graph()
-	g.add_edge('A','B',3)
-	g.add_edge('A','C',7)
-	g.add_edge('A','D',10)
-	g.add_edge('B','C',2)
-	g.add_edge('B','G',5)
-	g.add_edge('C','D',6)
-	g.add_edge('C','E',4)
-	g.add_edge('C','F',10)
-	g.add_edge('D','F',9)
-	g.add_edge('E','F',2)
-	g.add_edge('G','F',4)
+  g = Graph()
+  g.add_edge('A','B',3)
+  g.add_edge('A','C',7)
+  g.add_edge('A','D',10)
+  g.add_edge('B','C',2)
+  g.add_edge('B','G',5)
+  g.add_edge('C','D',6)
+  g.add_edge('C','E',4)
+  g.add_edge('C','F',10)
+  g.add_edge('D','F',9)
+  g.add_edge('E','F',2)
+  g.add_edge('G','F',4)
 
-	for v in g:
-		print(v)
-		
-	mst = MST(g) 
-	print('total count : {} , edges : {}'.format(*mst.prim('A')))
-
+  for v in g:
+    print(v)
+    
+  mst = MST(g) 
+  print('Prim ==> total count : {} , edges : {}'.format(*mst.prim('A')))
+  print('Kruskal ==> total count : {} , edges : {}'.format(*mst.kruskal()))
