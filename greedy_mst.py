@@ -1,59 +1,80 @@
 #!/usr/bin/env  python3
+'''
+A minimum spanning tree (MST) or minimum weight spanning tree is a subset of 
+the edges of a connected, edge-weighted undirected graph that connects all 
+the vertices together, without any cycles and with the minimum possible total
+edge weight. That is, it is a spanning tree whose sum of edge weights is as 
+small as possible.
+
+If there are n vertices in the graph, then each spanning tree has n − 1 edges.
+MST is one of greedy algorithm which means it can be made of choosing best node
+of current state. 
+There is two algoritm's in MST which called Kruskal algorithm and Prim algoritm
+If graph has a lots of edges, you can pick Prim algoritm otherwise Kruskal
+algoritm is more efficient
+'''
+
 from graph import Graph
 from heapq import heappush, heappop
 from union_find import UnionFind
 
-# MST는 greedy 알고리즘이다.
+def mst_prim(graph, start):
+  '''Using Heap data structure to select edges'''
 
-# 조건: 가중치를 가지는 무방향 그래프여야한다.
-# 모든노드들이 연결된다.
-# 가중치합이 최소가 된다.
-# n 개의 vertex에 n-1개의 edge를 가진다.
-# 간선의 개수가 작은경우 크루스칼알고리즘 많은경우 프림알고리즘
-# Kruskal알고리즘과 Prim알고리즘이 있다.
+  total_cost,mst = 0,[] 
+  discovered,explored = [(0,start,start)],set()
+  # Started from start position
+  while discovered:
+    # Looping over the while loop and if you find out not discovered vertices from 
+    # current vertex then push it to the heap and pop next vertex until every vertices 
+    # are discovered
+    cost,_from,_to = heappop(discovered)
+    if _to not in explored:
+      explored.add(_to)
+      total_cost += cost
+      mst.append((_from,_to))
+      for neighbor in set(graph.vertices[_to].neighbors) - explored:
+        heappush(discovered, (graph.vertices[_to].neighbors[neighbor],_to,neighbor))
 
-
-# Disjoint-set which is called Union-Find
-# 서로 중복되지 않는 부분 집합들 로 나눠진 원소들에 대한 정보를 저장하고 조작하는 자료구조
-# tree로 구현하는게 가장 효율적
-
-class MST(object):
-  
-  def __init__(self, graph):
-    self.graph = graph
-
-  def prim(self, start):
-    total_cost,mst = 0,[] 
-    discovered,explored = [(0,start,start)],set()
-    while discovered:
-      cost,_from,_to = heappop(discovered)
-      if _to not in explored:
-        explored.add(_to)
-        total_cost += cost
-        mst.append((_from,_to))
-        for v in set(self.graph.vertices[_to].neighbors) - explored:
-          heappush(discovered, (self.graph.vertices[_to].neighbors[v],_to,v) )
-
-    return total_cost, mst[1:] 
+  return total_cost, mst[1:] 
     
-  def kruskal(self, ):
-    # Sorted by weight
-    total_cost, u = 0, UnionFind()
-    edges = sorted(self.graph.get_edges(), key=lambda x: x[2])
-    for start, end, _ in edges:
-      u.union(u[start],u[end])
-    mst = u.get_parent()
-    print(mst)
-    for e in edges:
-      for m in mst.items():
-        if set(m).issubset(set(e)): total_cost += e[2]
 
-    return total_cost, mst
+def mst_kruskal(graph):
+  '''Using Disjoint-set data structure to select edges'''
+
+  total_cost, mst = 0, []
+  u = UnionFind()
+
+  # Sorted by weight
+  edges = sorted(graph.get_edges(), key=lambda x: x[2])
+
+  for start, end, weight in edges:
+    # If start vertex and end vertex has different parent on union-find structure
+    # then joining the two subset
+    if u[start] != u[end]:
+      u.union(u[start],u[end])
+      total_cost += weight
+      mst.append((start,end))
+
+  return total_cost, mst
         
 
 
 if __name__ == '__main__':
+  print('''MST : Prim algorithm and kruskal algorithm Exemple graph looks like this\n
+  [EX]
+                  [A]
+              3 /  |  \\ 10
+               /   |7  \\ 
+             [B]--[C]--[D]
+             /  2 /|  6 |
+           5/    /4|10  |
+           /    [E]|    |
+          /     2\\ |    /9 
+        [G]-------[F]--/
+              4
 
+        ''')
   g = Graph()
   g.add_edge('A','B',3)
   g.add_edge('A','C',7)
@@ -70,6 +91,5 @@ if __name__ == '__main__':
   for v in g:
     print(v)
     
-  mst = MST(g) 
-  print('Prim ==> total count : {} , edges : {}'.format(*mst.prim('A')))
-  print('Kruskal ==> total count : {} , edges : {}'.format(*mst.kruskal()))
+  print('\nPrim ==> total count : {} , edges : {}'.format(*mst_prim(g,'A')))
+  print('\nKruskal ==> total count : {} , edges : {}'.format(*mst_kruskal(g)))

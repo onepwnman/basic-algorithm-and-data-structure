@@ -1,18 +1,18 @@
 #!/usr/bin/env  python3
+'''
+Basic Graph Structure
+Every Vertex contains unique id and set of it's neighbors
+If the weight between two vertices is not given then it will 
+Initialize with None
+Exemple Graph looks like this 
 
-# Basic Graph Structure
-# Every Vertex contains unique id and set of it's neighbors
-# If the weight between two vertices is not given then it will 
-# Initialize with None
-# Exemple Graph looks like this 
-#
-# [A] --- [B] --- [C] --- [D]
-#          |       |
-#           \     / 
-#            \   /
-#             [E] --- [F]
-#
-##############################################
+[A] --- [B] --- [C] --- [D]
+         |       |
+          \     / 
+           \   /
+            [E] --- [F]
+
+'''
 
 class Graph(object):
 

@@ -81,7 +81,7 @@ class GraphSearch(object):
 
 if __name__ == '__main__':
   print('''########## Graph Depth-First Search and Breadth-Frist Search Test ###########
-              Exemple Graph looks like this\n
+              Exemple graph looks like this\n
                            [A] --- [B] --- [C] --- [D]
                                     |       |
                                      \     /
