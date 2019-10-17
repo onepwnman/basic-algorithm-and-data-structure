@@ -6,20 +6,28 @@ into a number of disjoint (non-overlapping) subsets.
 '''
 
 class UnionFind(object):
-  ''' Implementation by tree is most efficient'''
+  '''Implemented by tree'''
   def __init__(self, ):
     self.parent,self.rank = {},{}
 
+
   def __repr__(self, ):
     '''To make easy to show how set's are connected'''
-    d = {}
-    for key,parent in self.parent.items():
-      if parent not in d: d[parent] = [key]
-      else: d[parent].append(key)
-    return 'Disjoint-set: ' + str(d)
+    sets = {}
+    for key in self.parent:
+      parent = self[key]
+      if parent not in sets: sets[parent] = [key]
+      else: sets[parent].append(key)
+    return 'Disjoint-set: ' + str(sets)
+
+
+  def get_parent(self, ):
+    return self.parent
     
+
   def __getitem__(self, x):
     return self.find(x)
+
 
   def find(self, x):
     '''
@@ -37,6 +45,7 @@ class UnionFind(object):
     finally:
       return self.parent[x]
   
+
   def union(self, x, y):
     '''
     Union(x,y) uses Find to determine the roots of the trees x and y belong to. 
@@ -45,27 +54,26 @@ class UnionFind(object):
     making x a child of y, the height of the trees can grow as O(n).  
     To prevent this union by rank is used.
     '''
-    x,y = self.find(x),self.find(y)
+    x,y = self[x],self[y]
     if x != y:
-      if self.rank[x] > self.rank[y]:  self.parent[y] = x
-      else:  self.parent[x] = y
+      if self.rank[x] < self.rank[y]:  self.parent[x] = y
+      else:  self.parent[y] = x
       if self.rank[x] == self.rank[y]:  self.rank[y] += 1
 
-  def get_parent(self, ):
-    return self.parent
     
-
 if __name__ == '__main__':
   u = UnionFind()
-  u.union(u['A'],u['B'])
-  u.union(u['B'],u['C'])
-  u.union(u['D'],u['A'])
-  u.union(u['F'],u['V'])
-  u.union(u['E'],u['A'])
-  u.union(u['G'],u['H'])
-  u.union(u['Z'],u['N'])
-  u.union(u['J'],u['N'])
-  u.union(u['E'],u['M'])
+  u.union(u['0'],u['1'])
+  print(u)
+  u.union(u['3'],u['4'])
+  print(u)
+  u.union(u['5'],u['6'])
+  print(u)
+  u.union(u['1'],u['2'])
+  print(u)
+  u.union(u['3'],u['6'])
+  print(u)
+  u.union(u['0'],u['6'])
   print(u)
 
 

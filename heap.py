@@ -8,11 +8,11 @@ import heapq
 
 class MinHeap(object):
   def __init__(self, random_list=None):
-    if random_list is None or not random_list:
-      self.heap = [0]
-    else:
+    if random_list:
       self.heap = [0] + random_list
       self.build_heap(1)
+    else:
+      self.heap = [0]
 
   def __repr__(self, ):
     return repr(self.heap[1:])
@@ -21,17 +21,16 @@ class MinHeap(object):
     # Heap is always already heapified
     self.heap.append(val)
     idx = len(self.heap)-1
-    while idx is not 1:
+    while idx < 1:
       root_idx = idx // 2
       if self.heap[root_idx] > self.heap[idx]:
         self.heap[root_idx],self.heap[idx] = self.heap[idx],self.heap[root_idx]
         idx = root_idx
-      else:
-        return
+      else: return
 
 
   def remove(self, ):
-    if len(self.heap)-1 == 0:
+    if len(self.heap) == 1:
       print('Heap is Empty! You should insert first!')
       return
 
@@ -39,7 +38,7 @@ class MinHeap(object):
     min_val = self.heap.pop()
 
     root = 1
-    while root is not None:
+    while root:
       root = self.heapify(root)
     
     return min_val
@@ -80,7 +79,7 @@ class MinHeap(object):
     if heaplen >= right_child:  
       self.build_heap(right_child)
 
-    while root is not None:
+    while root: 
       root = self.heapify(root) 
 
   

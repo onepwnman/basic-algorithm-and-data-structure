@@ -1,14 +1,21 @@
 #!/usr/bin/env  python3
 from random import sample
 
-# Basic implementation of Binary Search Tree 
-# all method's are made up with recursive function call for quick implementation
-
 # Binary Search Tree has few conditions 
 # First : BST is a binary tree so it has at most 2 child per each node
 # Second : Every value in node must be unique
 # Third : Every left child's value will be lower the it's parent and right will be higher
 # Fourth: Left and Right subtree should be a BST
+
+
+# Represent each node
+class Node(object):
+  def __init__(self, data):
+    self.left = None
+    self.right = None
+    self.data = data
+    self.parent = None
+
 
 # Represent Binary Search Tree
 class BST(object):
@@ -59,10 +66,10 @@ class BST(object):
     # if value is smaller then the current node value, go left child
     # if value is larger then the current node value, go right child
     if current_node.data > data:
-      if current_node.left is not None:
+      if current_node.left :
         return self.search_data(data, current_node.left)
     elif current_node.data < data:
-      if current_node.right is not None:
+      if current_node.right :
         return self.search_data(data, current_node.right)
     else:
       return current_node
@@ -90,7 +97,7 @@ class BST(object):
         node.parent.right = None
 
     # When selected node has two childs
-    elif node.left is not None and node.right is not None:
+    elif node.left  and node.right :
       # Current Node will be deleted so it need's replacement for the empty place
       # The replacement could be biggest value from the left side of subtree
       # Or smallest value from the right side of subtree
@@ -109,9 +116,9 @@ class BST(object):
 
       # Putting the replacement node to the empty place
       right_min_node.parent = node.parent
-      if node.left is not None:
+      if node.left :
         node.left.parent = right_min_node
-      if node.right is not None:
+      if node.right :
         node.right.parent = right_min_node
         
       right_min_node.left, right_min_node.right = node.left, node.right
@@ -119,7 +126,7 @@ class BST(object):
     # When selected node has one child
     else:
       # The child is attached to which side of current node?
-      if node.left is not None: child = node.left
+      if node.left : child = node.left
       else: child = node.right
       
       # if current node is root 
@@ -138,7 +145,7 @@ class BST(object):
   def _find_min_from_rightpart(self, node):
     # Finding down through the BST until there is no left node
     # And remove that node and return it
-    if node.left is not None:
+    if node.left :
       return self._find_min_from_rightpart(node.left)
     return self.remove_node(node.data)
     
@@ -150,21 +157,14 @@ class BST(object):
     if node is None:
       node = self.root
 
-    if node.left is not None:
+    if node.left :
       self.print_node(node.left)
     print("Data: {}, Parent: {}".format(node.data, 
-        node.parent.data if node.parent is not None else None))
-    if node.right is not None:
+        node.parent.data if node.parent  else None))
+    if node.right :
       self.print_node(node.right)
 
 
-# Represent each node
-class Node(object):
-  def __init__(self, data):
-    self.left = None
-    self.right = None
-    self.data = data
-    self.parent = None
 
 
 if __name__== '__main__':
@@ -173,7 +173,7 @@ if __name__== '__main__':
   for data in sample(range(10), 10):
     bst.add_node(Node(data))
   
-  while bst.root is not None:
+  while bst.root :
     bst.print_node()
     n = int(input("Enter data to delete in the BST: "))
     bst.remove_node(n)
